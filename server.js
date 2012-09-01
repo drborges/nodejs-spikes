@@ -1,34 +1,42 @@
+require('./arrays');
 var net = require('net');
 
 exports.create = function(port) {
 	port = port || 3030;
-	var server = net.createServer();
+	var clients = [];
+	var socket = net.createServer();
 	
+	var process_data = function(data) {
+		console.log('[Server] client said: ' + data);
+	};
 	var handle_connection = function(socket) {
 		console.log('[Server] client connected.');
-		socket.write("Welcome to the server!");
-		socket.on('data', function(msg) {
-			handle_client_message(msg);
+		clients.push(socket);
+		socket.write("Welcome to my first nodeJS server!");
+		socket.on('data', function(data) {
+			process_data(data);
 		});
-	};
-	
-	var handle_client_message = function(msg) {
-		console.log('[Server] client said: ' + msg);
 	};
 
 	return {
 		start: function() {
-			server.listen(port, function() {
+			socket.listen(port, function() {
 				console.log('[Server] listening on port: ' + port);
 			});
 			
-			server.on('connection', function(socket) {
+			socket.on('connection', function(socket) {
 				handle_connection(socket);
 			});
 		},
 		
+		send: function(data) {
+			clients.forEach(function(client) {
+				client.write(data);
+			});
+		},
+		
 		stop: function() {
-			server.end();
+			socket.end();
 		}
 	};
 };

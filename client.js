@@ -3,6 +3,9 @@ var net = require('net');
 exports.create = function(port) {
 	port = port || 3030;
 	var socket = {};
+	var process_data = function(data) {
+		console.log('[Client] server said: ' + data);
+	};
 	
 	return {
 		connect: function() {
@@ -12,15 +15,12 @@ exports.create = function(port) {
 			});
 			
 			socket.on('data', function(data) {
-				self.receive(data);
+				process_data(data);
 			});
 			
 			return self;
 		},
 		
-		receive: function(data) {
-			console.log('[Client] server said: ' + data);
-		},
 		
 		send: function(data) {
 			socket.write(data);
