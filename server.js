@@ -1,4 +1,3 @@
-require('./arrays');
 var net = require('net');
 
 exports.create = function(port) {
@@ -6,9 +5,7 @@ exports.create = function(port) {
 	var clients = [];
 	var socket = net.createServer();
 	
-	var process_data = function(data) {
-		console.log('[Server] client said: ' + data);
-	};
+	var process_data = function(data) { console.log('[Server] client said: ' + data); };
 	var handle_connection = function(socket) {
 		console.log('[Server] client connected.');
 		clients.push(socket);
@@ -30,7 +27,8 @@ exports.create = function(port) {
 		},
 		
 		send: function(data) {
-			clients.forEach(function(client) {
+			clients.forEach(function(client, index) {
+				console.log('[Server] sending data to client #' + index);
 				client.write(data);
 			});
 		},

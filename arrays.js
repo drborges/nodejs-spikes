@@ -1,13 +1,26 @@
 if (!Array.prototype.forEach) {
-	Array.prototype.forEach = function(fun /* , thisp */) {
-		var len = this.length;
-		if (typeof fun != "function")
+	console.log('Defined "forEach" function for arrays');
+	Array.prototype.forEach = function(func) {
+		if (typeof func != "function")
 			throw new TypeError();
 
-		var thisp = arguments[1];
-		for ( var i = 0; i < len; i++) {
-			if (i in this)
-				fun.call(thisp, this[i]);
+		for (var i = 0; i < this.length; i++) {
+			func(this[i], i);
 		}
+	};
+}
+
+if (!Array.prototype.map) {
+	console.log('Defined "map" function for arrays');
+	Array.prototype.map = function(func) {
+		if (typeof func != "function")
+			throw new TypeError();
+		
+		var result = [];
+		for (var i = 0; i < this.length; i++) {
+			result[i] = func(this[i]);
+		}
+		
+		return result;
 	};
 }
